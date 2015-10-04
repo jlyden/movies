@@ -67,11 +67,8 @@ main_page_head = '''
             font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
 			font-style: italic;
 			font-size: 125%;
-			padding-top: 5px;
-			margin-bottom: 0px;
-		}
-        .movie-imdb {
-            font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+			padding-top: 10px;
+			padding-bottom:20px
 		}
     </style>
     <script type="text/javascript" charset="utf-8">
@@ -126,8 +123,18 @@ main_page_content = '''
           <div class="navbar-header">
             <a class="navbar-brand" href="#">jenny's Movie Picks - Click the movie to see the trailer</a>
           </div>
-        </div>
-      </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">IMDb links<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+				  {imdb_links}
+                </ul>
+              </li>
+            </ul>
+          </div>
+		</div>  <!-- \container -->
+      </div> <!-- \navbar -->
     </div>
     <div class="container">
       {movie_tiles}
@@ -136,13 +143,29 @@ main_page_content = '''
 </html>
 '''
 
+# A single movie entry template for navbar IMDb list
+imdb_link_content = '''
+    <li><a href="{imdb_ref}">{movie_title}</a></li>
+'''
+
+
+def create_imdb_links_content(movies):
+    # The HTML content for the navbar IMDb list
+    content = ''
+    for movie in movies:
+        # Append the tile for the movie with its content filled in
+        content += imdb_link_content.format(
+            movie_title=movie.title,
+            imdb_ref=movie.imdb_url,
+        )
+    return content
+
 
 # A single movie entry html template
 movie_tile_content = '''
 <div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
     <h2 class="movie-title">{movie_title}</h2>
     <img src="{poster_image_url}" width="220" height="342">
-    <p class="movie-imdb"><a href="{imdb_ref}" target="_blank">More info at IMDb</a> (<em>new window</em>)</h2>
     <p class="movie-storyline">{movie_storyline}</p>
 </div>
 '''
@@ -165,7 +188,6 @@ def create_movie_tiles_content(movies):
             movie_title=movie.title,
             poster_image_url=movie.poster_image_url,
             trailer_youtube_id=trailer_youtube_id,
-            imdb_ref=movie.imdb_url,
             movie_storyline=movie.storyline
         )
     return content
@@ -177,6 +199,7 @@ def open_movies_page(movies):
 
     # Replace the movie tiles placeholder generated content
     rendered_content = main_page_content.format(
+        imdb_links=create_imdb_links_content(movies),	
         movie_tiles=create_movie_tiles_content(movies))
 
     # Output the file
