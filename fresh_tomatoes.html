@@ -1,9 +1,4 @@
-import webbrowser
-import os
-import re
 
-# Styles and scripting for the page
-main_page_head = '''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,11 +95,7 @@ main_page_head = '''
         });
     </script>
 </head>
-'''
 
-
-# The main page layout and title bar
-main_page_content = '''
   <body>
     <!-- Trailer Video Modal -->
     <div class="modal" id="trailer">
@@ -131,84 +122,65 @@ main_page_content = '''
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More info at IMDb<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-				  {imdb_links}
+				  
+    <li><a href="http://www.imdb.com/title/tt0112471/">Before Sunrise</a></li>
+
+    <li><a href="http://www.imdb.com/title/tt0168987/">Better Than Chocolate</a></li>
+
+    <li><a href="http://www.imdb.com/title/tt0198781/">Monsters, Inc</a></li>
+
+    <li><a href="http://www.imdb.com/title/tt0108002/">Rudy</a></li>
+
+    <li><a href="http://www.imdb.com/title/tt0105488/">Strictly Ballroom</a></li>
+
+    <li><a href="http://www.imdb.com/title/tt0103074/">Thelma and Louise</a></li>
+
                 </ul>
               </li>
             </ul>
           </div>
 		</div>  <!-- \container -->
-      </div> <!-- \navbar -->
+      </div> <!-- 
+avbar -->
     </div>
     <div class="container">
-      {movie_tiles}
+      
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="25v7N34d5HE" data-toggle="modal" data-target="#trailer">
+    <h2 class="movie-title">Before Sunrise</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/en/d/da/Before_Sunrise_poster.jpg" width="220" height="342">
+    <p class="movie-storyline">One night in Paris ...</p>
+</div>
+
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="6hcvuF5DWyY" data-toggle="modal" data-target="#trailer">
+    <h2 class="movie-title">Better Than Chocolate</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/en/3/3a/Better_Than_Chocolate_%28film%29.jpg" width="220" height="342">
+    <p class="movie-storyline">Love, honesty, family, and chocolate</p>
+</div>
+
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="6tCxnHCqqxg" data-toggle="modal" data-target="#trailer">
+    <h2 class="movie-title">Monsters, Inc</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/en/6/63/Monsters_Inc.JPG" width="220" height="342">
+    <p class="movie-storyline">Work-a-day monsters meet a potential invader</p>
+</div>
+
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="Xm0pTMbDaMI" data-toggle="modal" data-target="#trailer">
+    <h2 class="movie-title">Rudy</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/en/2/29/Rudy2.jpg" width="220" height="342">
+    <p class="movie-storyline">A kid, a football team and a dream</p>
+</div>
+
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="7dtfxf3FFx4" data-toggle="modal" data-target="#trailer">
+    <h2 class="movie-title">Strictly Ballroom</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/en/0/04/StrictlyBallroom.jpg" width="220" height="342">
+    <p class="movie-storyline">Love and competition on the dancefloor</p>
+</div>
+
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="2iBFmKlO4BY" data-toggle="modal" data-target="#trailer">
+    <h2 class="movie-title">Thelma and Louise</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/en/d/de/Thelma_%26_Louiseposter.jpg" width="220" height="342">
+    <p class="movie-storyline">Two ladies get away from it all</p>
+</div>
+
     </div>
   </body>
 </html>
-'''
-
-# A single movie entry template for navbar IMDb list
-imdb_link_content = '''
-    <li><a href="{imdb_ref}">{movie_title}</a></li>
-'''
-
-
-def create_imdb_links_content(movies):
-    # The HTML content for the navbar IMDb list
-    content = ''
-    for movie in movies:
-        # Append the tile for the movie with its content filled in
-        content += imdb_link_content.format(
-            movie_title=movie.title,
-            imdb_ref=movie.imdb_url,
-        )
-    return content
-
-
-# A single movie entry html template
-movie_tile_content = '''
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
-    <h2 class="movie-title">{movie_title}</h2>
-    <img src="{poster_image_url}" width="220" height="342">
-    <p class="movie-storyline">{movie_storyline}</p>
-</div>
-'''
-
-
-def create_movie_tiles_content(movies):
-    # The HTML content for this section of the page
-    content = ''
-    for movie in movies:
-        # Extract the youtube ID from the url
-        youtube_id_match = re.search(
-            r'(?<=v=)[^&#]+', movie.trailer_youtube_url)
-        youtube_id_match = youtube_id_match or re.search(
-            r'(?<=be/)[^&#]+', movie.trailer_youtube_url)
-        trailer_youtube_id = (youtube_id_match.group(0) if youtube_id_match
-                              else None)
-
-        # Append the tile for the movie with its content filled in
-        content += movie_tile_content.format(
-            movie_title=movie.title,
-            poster_image_url=movie.poster_image_url,
-            trailer_youtube_id=trailer_youtube_id,
-            movie_storyline=movie.storyline
-        )
-    return content
-
-
-def open_movies_page(movies):
-    # Create or overwrite the output file
-    output_file = open('fresh_tomatoes.html', 'w')
-
-    # Replace the movie tiles placeholder generated content
-    rendered_content = main_page_content.format(
-        imdb_links=create_imdb_links_content(movies),	
-        movie_tiles=create_movie_tiles_content(movies))
-
-    # Output the file
-    output_file.write(main_page_head + rendered_content)
-    output_file.close()
-
-    # open the output file in the browser (in a new tab, if possible)
-    url = os.path.abspath(output_file.name)
-    webbrowser.open('file://' + url, new=2)
