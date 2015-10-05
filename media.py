@@ -1,6 +1,7 @@
 # needed for show_trailer()
 import webbrowser
 
+
 class Movie():
     # class __doc__
     """This class provides a way to store movie related information"""
