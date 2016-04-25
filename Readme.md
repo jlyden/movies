@@ -1,7 +1,8 @@
 #Project: Movie Trailer Website  - jennifer lyden
 
 ##Synopsis
-Dynamically creates a website displaying movie posters with trailer pop-up (modal) and links to additional information. Built using Udacity starter code for Full Stack Nanodegree program.
+- Dynamically creates a website displaying movie posters with trailer pop-up (modal) and links to additional information. Built using Udacity starter code for Full Stack Nanodegree program.
+- Developed from starter code provided by Udacity.
 
 ##Required Libraries and Dependencies
 You will need Python v2.* to run this project.
